@@ -109,3 +109,31 @@ def degisim_araligi(veri):
 
 def degisim_katsayisi(veri):
     return (std_sapma(veri) / ortalama(veri)) * 100
+# ----- 4. Hesaplama ve sonuçların kaydı -----
+sonuc_metni = ""
+for degisken, liste in veri.items():
+    temiz, aykirilar, (q1, q3) = aykiri_degerler(liste)
+    
+    sonuc_metni += f"\n=== {degisken.upper()} ===\n"
+    sonuc_metni += f"Aykırı değerler: {aykirilar}\n"
+    sonuc_metni += f"Ortalama: {ortalama(temiz):.2f}\n"
+    sonuc_metni += f"Ortanca: {ortanca(temiz):.2f}\n"
+    sonuc_metni += f"Tepe Değer: {mod(temiz)}\n"
+    sonuc_metni += f"Değişim Aralığı: {degisim_araligi(temiz):.2f}\n"
+    sonuc_metni += f"Ortalama Mutlak Sapma: {ort_mutlak_sapma(temiz):.2f}\n"
+    sonuc_metni += f"Varyans: {varyans(temiz):.2f}\n"
+    sonuc_metni += f"Standart Sapma: {std_sapma(temiz):.2f}\n"
+    sonuc_metni += f"Değişim Katsayısı: {degisim_katsayisi(temiz):.2f}%\n"
+    sonuc_metni += f"Çeyrekler Açıklığı : {(q3 - q1):.2f}\n"
+
+# ----- 5. Kutu(Boxplot) çizimi -----
+plt.boxplot([veri["x1"], veri["x2"], veri["x3"]], labels=["x1","x2","x3"])
+plt.title("Kutu Çizimi (Boxplot)")
+plt.savefig("boxplot.png")
+plt.close()
+
+# ----- 6. Sonuç dosyasına yazdırma -----
+with open("sonuc.txt", "w") as f:
+    f.write(sonuc_metni)
+
+print("Hesaplamalar tamamlandı. Sonuçlar 'sonuc.txt' dosyasına yazıldı.")
